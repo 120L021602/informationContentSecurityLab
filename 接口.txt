@@ -1,0 +1,91 @@
+#### 接收数据
+* url:/api/receive_data
+* 请求方法：POST
+* 请求参数：表单
+{
+    protocal:string;协议
+    port:Integer;端口
+    catalogue:string;是来自哪个应用的流量
+}
+* 返回类型：JSON
+*  返回格式：
+{
+    success:boolean;
+    msg:string;
+}
+
+#### 端口信息
+*  url:/api/port_information
+* 请求方法：GET
+*  请求参数：无
+{
+    
+}
+* 返回类型：JSON
+*  返回格式：
+{
+    success:boolean;
+    msg:string;
+    portList:ArrayList<Integer>;
+    idList:ArrayList<Integer>;
+}
+
+#### 常用端口统计
+*  url:/api/protocol_statistics
+* 请求方法：GET
+*  请求参数：无
+{
+   
+}
+* 返回类型：JSON
+*  返回格式：
+{
+    success:boolean;
+    msg:string;
+    comPortSta:ComPortSta;
+}
+
+#### 协议信息
+*  url:/api/protocol_information
+* 请求方法：GET
+*  请求参数：无
+{
+   
+}
+* 返回类型：JSON
+*  返回格式：
+{
+    success:boolean;
+    msg:string;
+    protocolList:ArrayList<String>;
+    idList:ArrayList<Integer>;
+}
+
+#### 常用协议统计
+*  url:/api/protocol_istatistics
+* 请求方法：GET
+*  请求参数：无
+{
+   
+}
+* 返回类型：JSON
+*  返回格式：
+{
+    success:boolean;
+    msg:string;
+    comProSta:ComProSta;
+}
+
+#### 综合结果展示
+*  url:/api/comprehensive_display
+* 请求方法：GET
+*  请求参数：无
+{
+   
+}
+* 返回类型：JSON
+*  返回格式：
+{
+    success:boolean;
+    msg:string;
+}
