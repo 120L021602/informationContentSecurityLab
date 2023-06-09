@@ -69,6 +69,9 @@ public class ComPortSta {
     @Column(name="port_5060")
     private Integer port_5060;
 
+    @Column(name="port_8000")
+    private Integer port_8000;
+
     public Integer getId() {
         return id;
     }
@@ -213,6 +216,14 @@ public class ComPortSta {
         this.port_5060 = port_5060;
     }
 
+    public Integer getPort_8000() {
+        return port_8000;
+    }
+
+    public void setPort_8000(Integer port_8000) {
+        this.port_8000 = port_8000;
+    }
+
     public ComPortSta() {
         this.port_20 = 0;
         this.port_21 = 0;
@@ -231,5 +242,8 @@ public class ComPortSta {
         this.port_443 = 0;
         this.port_3389 = 0;
         this.port_5060 = 0;
+        this.port_8000 = 0;
     }
+
+
 }

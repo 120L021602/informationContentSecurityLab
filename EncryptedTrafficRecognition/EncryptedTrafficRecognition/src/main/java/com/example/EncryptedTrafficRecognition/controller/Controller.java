@@ -1,16 +1,21 @@
 package com.example.EncryptedTrafficRecognition.controller;
 
 
+import com.example.EncryptedTrafficRecognition.dao.AppStaRepository;
 import com.example.EncryptedTrafficRecognition.dao.ComPortStaRepository;
 import com.example.EncryptedTrafficRecognition.dao.ComProStaRepository;
 import com.example.EncryptedTrafficRecognition.dao.EncMsgRepository;
+import com.example.EncryptedTrafficRecognition.domain.AppSta;
 import com.example.EncryptedTrafficRecognition.domain.ComPortSta;
 import com.example.EncryptedTrafficRecognition.domain.ComProSta;
 import com.example.EncryptedTrafficRecognition.domain.EncryptedMessage;
+import com.example.EncryptedTrafficRecognition.request.ReceiveDataRequest;
+import com.example.EncryptedTrafficRecognition.request.SinglePacket;
 import com.example.EncryptedTrafficRecognition.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,17 +29,22 @@ public class Controller {
     @Autowired
     ComPortStaRepository comPortStaRepository;
 
+    @Autowired
+    AppStaRepository appStaRepository;
+
     //从崔子那里接收数据
     @PostMapping("/api/receive_data")
-    public @ResponseBody Response receiveData(@RequestParam String protocol,
-                                              @RequestParam Integer port,
-                                              @RequestParam String catalogue){
+    public @ResponseBody Response receiveData(@RequestBody ReceiveDataRequest recDataReq){
         Response response = new Response();
-        EncryptedMessage encMsg = new EncryptedMessage();
-        encMsg.setProtocol(protocol);
-        encMsg.setPort(port);
-        encMsg.setCatalogue(catalogue);
-        encMsgRepository.save(encMsg);
+        List<EncryptedMessage> encMsgs = new ArrayList<>();
+        for(SinglePacket packet:recDataReq.getPackets()){
+            EncryptedMessage encryptedMessage=new EncryptedMessage();
+            encryptedMessage.setCatalogue(packet.getCatalogue());
+            encryptedMessage.setPort(packet.getPort());
+            encryptedMessage.setProtocol(packet.getProtocol());
+            encMsgs.add(encryptedMessage);
+        }
+        encMsgRepository.saveAll(encMsgs);
         response.setSuccess(true);
         response.setMsg("Successfully received your data!");
         return response;
@@ -132,6 +142,10 @@ public class Controller {
         cnt = list_143.size();
         comPortSta.setPort_143(cnt);
 
+        List<EncryptedMessage> list_8000 = encMsgRepository.findAllByPort(8000);
+        cnt = list_8000.size();
+        comPortSta.setPort_8000(cnt);
+
         comPortStaRepository.save(comPortSta);
 
         portStaResponse.setComPortSta(comPortSta);
@@ -219,4 +233,46 @@ public class Controller {
         compResponse.setMsg("Successfully returned the comprehensive information of encrypted messages.");
         return compResponse;
     }
+
+    @GetMapping("/api/app_statistics")
+    public @ResponseBody appStaResponse appStatistics(){
+        appStaResponse appStaResponse = new appStaResponse();
+        AppSta appSta = new AppSta();
+        appSta.setId(1);
+        int cnt = 0;
+
+        List<EncryptedMessage> wxList = encMsgRepository.findAllByCatalogue("wx");
+        cnt = wxList.size();
+        appSta.setWx(cnt);
+
+        List<EncryptedMessage> qqList = encMsgRepository.findAllByCatalogue("qq");
+        cnt = qqList.size();
+        appSta.setQq(cnt);
+
+        List<EncryptedMessage> httpsList = encMsgRepository.findAllByCatalogue("https");
+        cnt = httpsList.size();
+        appSta.setHttps(cnt);
+
+        appStaRepository.save(appSta);
+        appStaResponse.setAppSta(appSta);
+        appStaResponse.setMsg("Successfully returned information of applications.");
+        appStaResponse.setSuccess(true);
+
+        return appStaResponse;
+    }
+
+    @GetMapping("/api/clear_database")
+    public @ResponseBody boolean clearDatabase(){
+        try{
+            encMsgRepository.deleteAll();
+            appStaRepository.deleteAll();
+            comPortStaRepository.deleteAll();
+            comProStaRepository.deleteAll();
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 }

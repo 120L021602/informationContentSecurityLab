@@ -6,6 +6,15 @@ import {useStore} from '../stores/store.js'
 export default{
     components:{
         Display
+    },
+
+    setup(){
+        const store = useStore();
+        return {store};
+    },
+    
+    mounted(){
+        this.store.type = "showCalendar";
     }
     
 }

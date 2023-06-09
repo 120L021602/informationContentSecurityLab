@@ -8,6 +8,6 @@ export const useStore = defineStore('main', {
         portXData: [],
         portYdata: [],
         compDis: [],
-        type: 'showProInfo'
+        type: 'showCalendar'
       })
   })

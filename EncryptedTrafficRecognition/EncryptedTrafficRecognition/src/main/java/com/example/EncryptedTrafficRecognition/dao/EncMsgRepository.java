@@ -12,4 +12,6 @@ public interface EncMsgRepository extends JpaRepository<EncryptedMessage, Intege
     List<EncryptedMessage> findAllByPort(Integer port);
 
     List<EncryptedMessage> findAllByProtocol(String protocol);
+
+    List<EncryptedMessage> findAllByCatalogue(String catalogue);
 }

@@ -1,11 +1,13 @@
 #### 接收数据
 * url:/api/receive_data
 * 请求方法：POST
-* 请求参数：表单
+* 请求参数：JSON
 {
-    protocal:string;协议
-    port:Integer;端口
-    catalogue:string;是来自哪个应用的流量
+    packets:Array<{
+        protocal:string;协议
+        port:Integer;端口
+        catalogue:string;是来自哪个应用的流量
+    }>
 }
 * 返回类型：JSON
 *  返回格式：
@@ -88,4 +90,21 @@
 {
     success:boolean;
     msg:string;
+}
+
+#### 按应用统计
+*  url:/api/app_statistics
+* 请求方法：GET
+*  请求参数：无
+{
+   
+}
+* 返回类型：JSON
+*  返回格式：
+{
+    success:boolean;
+    msg:string;
+    wx:Integer;
+    qq:Integer;
+    https:Integer;
 }
